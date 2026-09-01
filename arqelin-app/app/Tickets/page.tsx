@@ -165,18 +165,31 @@ export default function TicketsPage() {
             </p>
           </div>
 
-          <button
-            style={{
-              background: "#F2994A",
-              color: "#FFFFFF",
-              border: "none",
-              padding: "12px 18px",
-              borderRadius: "8px",
-              fontWeight: "bold",
-            }}
-          >
-            + Create Ticket
-          </button>
+          <Link
+            href="/Tickets/Create"
+              style={{
+                  background: "#F2994A",
+                      color: "#FFFFFF",
+                          textDecoration: "none",
+                              padding: "12px 18px",
+                                  borderRadius: "8px",
+                                      fontWeight: "bold",
+                                          display: "inline-block",
+                                            }}
+                                            >
+                                              + Create Ticket
+                                              </Link>
+          
+              
+              
+              
+              
+              
+              
+          
+          
+            
+          
         </div>
 
         <div style={{ display: "grid", gap: "14px" }}>
