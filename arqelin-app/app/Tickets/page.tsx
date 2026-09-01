@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const tickets = [
   {
     id: "ARQ-1052",
@@ -92,12 +94,7 @@ function Stat({
         {number}
       </strong>
 
-      <p
-        style={{
-          color: "#5B6472",
-          marginBottom: 0,
-        }}
-      >
+      <p style={{ color: "#5B6472", marginBottom: 0 }}>
         {label}
       </p>
     </div>
@@ -159,7 +156,9 @@ export default function TicketsPage() {
           }}
         >
           <div>
-            <h2 style={{ marginBottom: "5px" }}>All tickets</h2>
+            <h2 style={{ marginBottom: "5px" }}>
+              All tickets
+            </h2>
 
             <p style={{ color: "#5B6472", marginTop: 0 }}>
               View and manage customer requests.
@@ -182,82 +181,103 @@ export default function TicketsPage() {
 
         <div style={{ display: "grid", gap: "14px" }}>
           {tickets.map((ticket) => (
-            <article
+            <Link
               key={ticket.id}
+              href={
+                ticket.id === "ARQ-1052"
+                  ? "/Tickets/ARQ-1052"
+                  : "#"
+              }
               style={{
-                background: "#FFFFFF",
-                padding: "20px",
-                borderRadius: "12px",
-                border: "1px solid #E4E1D8",
+                textDecoration: "none",
+                color: "inherit",
+                cursor:
+                  ticket.id === "ARQ-1052"
+                    ? "pointer"
+                    : "default",
               }}
             >
-              <div
+              <article
                 style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  gap: "20px",
-                  flexWrap: "wrap",
+                  background: "#FFFFFF",
+                  padding: "20px",
+                  borderRadius: "12px",
+                  border: "1px solid #E4E1D8",
                 }}
               >
-                <div style={{ maxWidth: "650px" }}>
-                  <small style={{ color: "#7A8494" }}>
-                    {ticket.id}
-                  </small>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    gap: "20px",
+                    flexWrap: "wrap",
+                  }}
+                >
+                  <div style={{ maxWidth: "650px" }}>
+                    <small style={{ color: "#7A8494" }}>
+                      {ticket.id}
+                    </small>
 
-                  <h3
+                    <h3
+                      style={{
+                        marginTop: "6px",
+                        marginBottom: "8px",
+                      }}
+                    >
+                      {ticket.subject}
+                    </h3>
+
+                    <p
+                      style={{
+                        color: "#5B6472",
+                        marginBottom: 0,
+                      }}
+                    >
+                      Customer: {ticket.customer}
+                    </p>
+                  </div>
+
+                  <div
                     style={{
-                      marginTop: "6px",
-                      marginBottom: "8px",
+                      display: "grid",
+                      gap: "8px",
+                      minWidth: "140px",
                     }}
                   >
-                    {ticket.subject}
-                  </h3>
+                    <Badge
+                      label={ticket.priority}
+                      color={ticket.priorityColor}
+                    />
 
-                  <p
-                    style={{
-                      color: "#5B6472",
-                      marginBottom: 0,
-                    }}
-                  >
-                    Customer: {ticket.customer}
-                  </p>
+                    <Badge
+                      label={ticket.status}
+                      color={ticket.statusColor}
+                    />
+                  </div>
                 </div>
 
                 <div
                   style={{
-                    display: "grid",
-                    gap: "8px",
-                    minWidth: "140px",
+                    borderTop: "1px solid #E4E1D8",
+                    marginTop: "18px",
+                    paddingTop: "14px",
+                    display: "flex",
+                    gap: "24px",
+                    flexWrap: "wrap",
+                    color: "#5B6472",
+                    fontSize: "14px",
                   }}
                 >
-                  <Badge
-                    label={ticket.priority}
-                    color={ticket.priorityColor}
-                  />
+                  <span>
+                    Agent: {ticket.agent}
+                  </span>
 
-                  <Badge
-                    label={ticket.status}
-                    color={ticket.statusColor}
-                  />
+                  <span>
+                    Last activity: {ticket.activity}
+                  </span>
                 </div>
-              </div>
-
-              <div
-                style={{
-                  borderTop: "1px solid #E4E1D8",
-                  marginTop: "18px",
-                  paddingTop: "14px",
-                  display: "flex",
-                  gap: "24px",
-                  flexWrap: "wrap",
-                  color: "#5B6472",
-                  fontSize: "14px",
-                }}
-              >
-                <span>Agent: {ticket.agent}</span>
-                <span>Last activity: {ticket.activity}</span>
-              </div>
-            </article>
+              </article>
+            </Link>
           ))}
         </div>
       </section>
