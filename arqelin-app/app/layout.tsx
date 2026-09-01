@@ -92,11 +92,16 @@ export default function RootLayout({
 
               <Link href="/" style={linkStyle}>
                 🏠 Dashboard
-              </Link>
+                </Link>
 
-              <Link href="/Cases" style={linkStyle}>
-                📁 Cases
-              </Link>
+                <Link href="/Tickets" style={linkStyle}>
+                  🎫 Tickets
+                  </Link>
+
+                  <Link href="/Cases" style={linkStyle}>
+                    📁 Cases
+                    </Link>
+
 
               <Link href="/PromiseTracker" style={linkStyle}>
                 ⏰ Promise Tracker
