@@ -104,9 +104,11 @@ export default function RootLayout({
                 
               
 
-              <div style={linkStyle}>
+              <Link href="/Automations" style={linkStyle}>
                 ⚡ Automations
-              </div>
+                </Link>
+              
+              
 
               <div style={linkStyle}>
                 ✦ Arqelin AI
