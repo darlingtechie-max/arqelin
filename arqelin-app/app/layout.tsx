@@ -107,12 +107,14 @@ export default function RootLayout({
                 ⏰ Promise Tracker
                 </Link>
                 
-              
 
               <Link href="/Automations" style={linkStyle}>
                 ⚡ Automations
                 </Link>
               
+              <Link href="/Team" style={linkStyle}>
+                👥 Team
+                </Link>
               
 
               <div style={linkStyle}>
