@@ -1,84 +1,280 @@
+import PriorityBadge from "@/components/PriorityBadge";
+import type { Priority } from "@/lib/priority";
+
+const cases: {
+  id: string;
+  subject: string;
+  customer: string;
+  priority: Priority;
+  status: string;
+  statusColor: string;
+  owner: string;
+  activity: string;
+}[] = [
+  {
+    id: "ARQ-C2042",
+    subject: "Delayed delivery with repeated missed updates",
+    customer: "Sarah Johnson",
+    priority: "Urgent",
+    status: "Needs Attention",
+    statusColor: "#D9534F",
+    owner: "Unassigned",
+    activity: "10 minutes ago",
+  },
+  {
+    id: "ARQ-C2038",
+    subject: "Account update requiring specialist review",
+    customer: "Michael Brown",
+    priority: "High",
+    status: "In Progress",
+    statusColor: "#2F80ED",
+    owner: "Daniel",
+    activity: "35 minutes ago",
+  },
+  {
+    id: "ARQ-C2031",
+    subject: "Repeated billing issue requiring investigation",
+    customer: "Ada Okafor",
+    priority: "Medium",
+    status: "Pending",
+    statusColor: "#E0A800",
+    owner: "Grace",
+    activity: "1 hour ago",
+  },
+  {
+    id: "ARQ-C2027",
+    subject: "Subscription cancellation follow-through",
+    customer: "James Wilson",
+    priority: "Low",
+    status: "Resolved",
+    statusColor: "#27AE60",
+    owner: "Daniel",
+    activity: "Yesterday",
+  },
+];
+
+function StatusBadge({
+  label,
+  color,
+}: {
+  label: string;
+  color: string;
+}) {
+  return (
+    <span
+      style={{
+        color,
+        fontWeight: "bold",
+        fontSize: "13px",
+      }}
+    >
+      ● {label}
+    </span>
+  );
+}
+
+function Stat({
+  number,
+  label,
+  color,
+}: {
+  number: string;
+  label: string;
+  color?: string;
+}) {
+  return (
+    <div
+      style={{
+        background: "#FFFFFF",
+        padding: "18px",
+        borderRadius: "12px",
+        border: "1px solid #E4E1D8",
+      }}
+    >
+      <strong
+        style={{
+          fontSize: "26px",
+          color: color || "#17233D",
+        }}
+      >
+        {number}
+      </strong>
+
+      <p
+        style={{
+          color: "#5B6472",
+          marginBottom: 0,
+        }}
+      >
+        {label}
+      </p>
+    </div>
+  );
+}
+
 export default function CasesPage() {
-      return (
-          <main
+  return (
+    <main
+      style={{
+        minHeight: "100vh",
+        background: "#F7F5F0",
+        color: "#17233D",
+        padding: "28px",
+        fontFamily: "Arial, sans-serif",
+        boxSizing: "border-box",
+      }}
+    >
+      <p
+        style={{
+          color: "#F2994A",
+          fontWeight: "bold",
+          fontSize: "13px",
+        }}
+      >
+        CUSTOMER RESOLUTION
+      </p>
+
+      <h1>Cases</h1>
+
+      <p style={{ color: "#5B6472" }}>
+        Manage customer issues that require investigation, ownership,
+        coordination, or follow-through.
+      </p>
+
+      <section
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(5, minmax(0, 1fr))",
+          gap: "14px",
+          margin: "28px 0",
+        }}
+      >
+        <Stat number="12" label="Active cases" />
+        <Stat number="4" label="Needs attention" color="#D9534F" />
+        <Stat number="5" label="In progress" color="#2F80ED" />
+        <Stat number="2" label="Pending" color="#E0A800" />
+        <Stat number="1" label="Resolved today" color="#27AE60" />
+      </section>
+
+      <section>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            gap: "16px",
+            flexWrap: "wrap",
+            marginBottom: "18px",
+          }}
+        >
+          <div>
+            <h2 style={{ marginBottom: "5px" }}>
+              Active cases
+            </h2>
+
+            <p style={{ color: "#5B6472", marginTop: 0 }}>
+              Issues requiring structured follow-through.
+            </p>
+          </div>
+
+          <button
+            style={{
+              background: "#F2994A",
+              color: "#FFFFFF",
+              border: "none",
+              padding: "12px 18px",
+              borderRadius: "8px",
+              fontWeight: "bold",
+              cursor: "pointer",
+            }}
+          >
+            + Create Case
+          </button>
+        </div>
+
+        <div style={{ display: "grid", gap: "14px" }}>
+          {cases.map((caseItem) => (
+            <article
+              key={caseItem.id}
+              style={{
+                background: "#FFFFFF",
+                padding: "20px",
+                borderRadius: "12px",
+                border: "1px solid #E4E1D8",
+              }}
+            >
+              <div
                 style={{
-                        minHeight: "100vh",
-                                background: "#F7F5F0",
-                                        color: "#17233D",
-                                                padding: "20px",
-                                                        fontFamily: "Arial, sans-serif",
-                                                              }}
-                                                                  >
-                                                                        <h1>Customer Cases</h1>
+                  display: "flex",
+                  justifyContent: "space-between",
+                  gap: "20px",
+                  flexWrap: "wrap",
+                }}
+              >
+                <div style={{ maxWidth: "650px" }}>
+                  <small style={{ color: "#7A8494" }}>
+                    {caseItem.id}
+                  </small>
 
-                                                                              <p style={{ color: "#5B6472" }}>
-                                                                                      Track and manage every customer issue from open to resolved.
-                                                                                            </p>
+                  <h3
+                    style={{
+                      marginTop: "6px",
+                      marginBottom: "8px",
+                    }}
+                  >
+                    {caseItem.subject}
+                  </h3>
 
-                                                                                                  <div
-                                                                                                          style={{
-                                                                                                                    background: "#17233D",
-                                                                                                                              color: "#FFFFFF",
-                                                                                                                                        padding: "20px",
-                                                                                                                                                  borderRadius: "16px",
-                                                                                                                                                            marginTop: "24px",
-                                                                                                                                                                    }}
-                                                                                                                                                                          >
-                                                                                                                                                                                  <p style={{ color: "#F2994A", marginTop: 0 }}>
-                                                                                                                                                                                            CASE OVERVIEW
-                                                                                                                                                                                                    </p>
+                  <p
+                    style={{
+                      color: "#5B6472",
+                      marginBottom: 0,
+                    }}
+                  >
+                    Customer: {caseItem.customer}
+                  </p>
+                </div>
 
-                                                                                                                                                                                                            <h2 style={{ marginBottom: 0 }}>12 active cases</h2>
-                                                                                                                                                                                                                  </div>
+                <div
+                  style={{
+                    display: "grid",
+                    gap: "8px",
+                    minWidth: "150px",
+                  }}
+                >
+                  <PriorityBadge
+                    priority={caseItem.priority}
+                  />
 
-                                                                                                                                                                                                                        <h2 style={{ marginTop: "32px" }}>Active cases</h2>
+                  <StatusBadge
+                    label={caseItem.status}
+                    color={caseItem.statusColor}
+                  />
+                </div>
+              </div>
 
-                                                                                                                                                                                                                              <div
-                                                                                                                                                                                                                                      style={{
-                                                                                                                                                                                                                                                background: "#FFFFFF",
-                                                                                                                                                                                                                                                          padding: "18px",
-                                                                                                                                                                                                                                                                    borderRadius: "14px",
-                                                                                                                                                                                                                                                                              border: "1px solid #E4E1D8",
-                                                                                                                                                                                                                                                                                        marginBottom: "12px",
-                                                                                                                                                                                                                                                                                                }}
-                                                                                                                                                                                                                                                                                                      >
-                                                                                                                                                                                                                                                                                                              <strong>ARQ-1042 · Delayed Delivery</strong>
-                                                                                                                                                                                                                                                                                                                      <p style={{ color: "#5B6472" }}>
-                                                                                                                                                                                                                                                                                                                                Customer: Sarah · Waiting for an update
-                                                                                                                                                                                                                                                                                                                                        </p>
-                                                                                                                                                                                                                                                                                                                                                <span style={{ color: "#F2994A" }}>Needs attention</span>
-                                                                                                                                                                                                                                                                                                                                                      </div>
+              <div
+                style={{
+                  borderTop: "1px solid #E4E1D8",
+                  marginTop: "18px",
+                  paddingTop: "14px",
+                  display: "flex",
+                  gap: "24px",
+                  flexWrap: "wrap",
+                  color: "#5B6472",
+                  fontSize: "14px",
+                }}
+              >
+                <span>Owner: {caseItem.owner}</span>
 
-                                                                                                                                                                                                                                                                                                                                                            <div
-                                                                                                                                                                                                                                                                                                                                                                    style={{
-                                                                                                                                                                                                                                                                                                                                                                              background: "#FFFFFF",
-                                                                                                                                                                                                                                                                                                                                                                                        padding: "18px",
-                                                                                                                                                                                                                                                                                                                                                                                                  borderRadius: "14px",
-                                                                                                                                                                                                                                                                                                                                                                                                            border: "1px solid #E4E1D8",
-                                                                                                                                                                                                                                                                                                                                                                                                                      marginBottom: "12px",
-                                                                                                                                                                                                                                                                                                                                                                                                                              }}
-                                                                                                                                                                                                                                                                                                                                                                                                                                    >
-                                                                                                                                                                                                                                                                                                                                                                                                                                            <strong>ARQ-1038 · Account Update</strong>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                    <p style={{ color: "#5B6472" }}>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                              Customer: Michael · Follow-up scheduled today
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                      </p>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                              <span style={{ color: "#2C4570" }}>In progress</span>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </div>
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          <div
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  style={{
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            background: "#FFFFFF",
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      padding: "18px",
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                borderRadius: "14px",
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          border: "1px solid #E4E1D8",
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  }}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        >
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <strong>ARQ-1031 · Billing Question</strong>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <p style={{ color: "#5B6472" }}>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  Customer: Ada · Awaiting team response
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          </p>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  <span style={{ color: "#2C4570" }}>Open</span>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </main>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              );
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              }
+                <span>
+                  Last activity: {caseItem.activity}
+                </span>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+    </main>
+  );
+}
