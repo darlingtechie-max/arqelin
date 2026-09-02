@@ -14,8 +14,8 @@ const cases: {
 }[] = [
   {
     id: "ARQ-C2042",
-    subject: "Delayed delivery with repeated missed updates",
-    customer: "Sarah Johnson",
+    subject: "Delivery arrived with a missing item requiring follow-through",
+    customer: "Ada Okafor",
     priority: "Urgent",
     status: "Needs Attention",
     statusColor: "#D9534F",
@@ -53,6 +53,14 @@ const cases: {
     activity: "Yesterday",
   },
 ];
+
+const activeCases = cases.filter(
+  (caseItem) => caseItem.status !== "Resolved"
+);
+
+const resolvedCases = cases.filter(
+  (caseItem) => caseItem.status === "Resolved"
+);
 
 function StatusBadge({
   label,
@@ -110,6 +118,108 @@ function Stat({
         {label}
       </p>
     </div>
+  );
+}
+
+function CaseCard({
+  caseItem,
+}: {
+  caseItem: (typeof cases)[number];
+}) {
+  const isClickable = caseItem.id === "ARQ-C2042";
+
+  const card = (
+    <article
+      style={{
+        background: "#FFFFFF",
+        padding: "20px",
+        borderRadius: "12px",
+        border: "1px solid #E4E1D8",
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          gap: "20px",
+          flexWrap: "wrap",
+        }}
+      >
+        <div style={{ maxWidth: "650px" }}>
+          <small style={{ color: "#7A8494" }}>
+            {caseItem.id}
+          </small>
+
+          <h3
+            style={{
+              marginTop: "6px",
+              marginBottom: "8px",
+            }}
+          >
+            {caseItem.subject}
+          </h3>
+
+          <p
+            style={{
+              color: "#5B6472",
+              marginBottom: 0,
+            }}
+          >
+            Customer: {caseItem.customer}
+          </p>
+        </div>
+
+        <div
+          style={{
+            display: "grid",
+            gap: "8px",
+            minWidth: "150px",
+          }}
+        >
+          <PriorityBadge priority={caseItem.priority} />
+
+          <StatusBadge
+            label={caseItem.status}
+            color={caseItem.statusColor}
+          />
+        </div>
+      </div>
+
+      <div
+        style={{
+          borderTop: "1px solid #E4E1D8",
+          marginTop: "18px",
+          paddingTop: "14px",
+          display: "flex",
+          gap: "24px",
+          flexWrap: "wrap",
+          color: "#5B6472",
+          fontSize: "14px",
+        }}
+      >
+        <span>Owner: {caseItem.owner}</span>
+
+        <span>
+          Last activity: {caseItem.activity}
+        </span>
+      </div>
+    </article>
+  );
+
+  if (!isClickable) {
+    return card;
+  }
+
+  return (
+    <Link
+      href="/Cases/ARQ-C2042"
+      style={{
+        textDecoration: "none",
+        color: "inherit",
+      }}
+    >
+      {card}
+    </Link>
   );
 }
 
@@ -195,86 +305,37 @@ export default function CasesPage() {
         </div>
 
         <div style={{ display: "grid", gap: "14px" }}>
-          {cases.map((caseItem) => (
-            <article
+          {activeCases.map((caseItem) => (
+            <CaseCard
               key={caseItem.id}
-              style={{
-                background: "#FFFFFF",
-                padding: "20px",
-                borderRadius: "12px",
-                border: "1px solid #E4E1D8",
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  gap: "20px",
-                  flexWrap: "wrap",
-                }}
-              >
-                <div style={{ maxWidth: "650px" }}>
-                  <small style={{ color: "#7A8494" }}>
-                    {caseItem.id}
-                  </small>
-
-                  <h3
-                    style={{
-                      marginTop: "6px",
-                      marginBottom: "8px",
-                    }}
-                  >
-                    {caseItem.subject}
-                  </h3>
-
-                  <p
-                    style={{
-                      color: "#5B6472",
-                      marginBottom: 0,
-                    }}
-                  >
-                    Customer: {caseItem.customer}
-                  </p>
-                </div>
-
-                <div
-                  style={{
-                    display: "grid",
-                    gap: "8px",
-                    minWidth: "150px",
-                  }}
-                >
-                  <PriorityBadge priority={caseItem.priority} />
-
-                  <StatusBadge
-                    label={caseItem.status}
-                    color={caseItem.statusColor}
-                  />
-                </div>
-              </div>
-
-              <div
-                style={{
-                  borderTop: "1px solid #E4E1D8",
-                  marginTop: "18px",
-                  paddingTop: "14px",
-                  display: "flex",
-                  gap: "24px",
-                  flexWrap: "wrap",
-                  color: "#5B6472",
-                  fontSize: "14px",
-                }}
-              >
-                <span>Owner: {caseItem.owner}</span>
-
-                <span>
-                  Last activity: {caseItem.activity}
-                </span>
-              </div>
-            </article>
+              caseItem={caseItem}
+            />
           ))}
         </div>
       </section>
+
+      {resolvedCases.length > 0 && (
+        <section style={{ marginTop: "36px" }}>
+          <div style={{ marginBottom: "18px" }}>
+            <h2 style={{ marginBottom: "5px" }}>
+              Resolved cases
+            </h2>
+
+            <p style={{ color: "#5B6472", marginTop: 0 }}>
+              Cases that have completed their required follow-through.
+            </p>
+          </div>
+
+          <div style={{ display: "grid", gap: "14px" }}>
+            {resolvedCases.map((caseItem) => (
+              <CaseCard
+                key={caseItem.id}
+                caseItem={caseItem}
+              />
+            ))}
+          </div>
+        </section>
+      )}
     </main>
   );
 }

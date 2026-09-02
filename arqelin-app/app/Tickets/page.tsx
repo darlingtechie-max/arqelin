@@ -36,10 +36,10 @@ const tickets: {
     id: "ARQ-1043",
     subject: "Delivery arrived with a missing item",
     customer: "Ada Okafor",
-    priority: "High",
-    status: "Pending",
-    statusColor: "#E0A800",
-    agent: "Grace",
+    priority: "Urgent",
+    status: "Open",
+    statusColor: "#2F80ED",
+    agent: "Unassigned",
     activity: "1 hour ago",
   },
   {
@@ -189,23 +189,15 @@ export default function TicketsPage() {
         </div>
 
         <div style={{ display: "grid", gap: "14px" }}>
-          {tickets.map((ticket) => (
-            <Link
-              key={ticket.id}
-              href={
-                ticket.id === "ARQ-1052"
-                  ? "/Tickets/ARQ-1052"
-                  : "#"
-              }
-              style={{
-                textDecoration: "none",
-                color: "inherit",
-                cursor:
-                  ticket.id === "ARQ-1052"
-                    ? "pointer"
-                    : "default",
-              }}
-            >
+          {tickets.map((ticket) => {
+            const ticketLinks: Record<string, string> = {
+              "ARQ-1052": "/Tickets/ARQ-1052",
+              "ARQ-1043": "/Tickets/ARQ-1043",
+            };
+
+            const href = ticketLinks[ticket.id];
+
+            const card = (
               <article
                 style={{
                   background: "#FFFFFF",
@@ -253,9 +245,7 @@ export default function TicketsPage() {
                       minWidth: "140px",
                     }}
                   >
-                    <PriorityBadge
-                      priority={ticket.priority}
-                    />
+                    <PriorityBadge priority={ticket.priority} />
 
                     <Badge
                       label={ticket.status}
@@ -285,8 +275,29 @@ export default function TicketsPage() {
                   </span>
                 </div>
               </article>
-            </Link>
-          ))}
+            );
+
+            if (href) {
+              return (
+                <Link
+                  key={ticket.id}
+                  href={href}
+                  style={{
+                    textDecoration: "none",
+                    color: "inherit",
+                  }}
+                >
+                  {card}
+                </Link>
+              );
+            }
+
+            return (
+              <div key={ticket.id}>
+                {card}
+              </div>
+            );
+          })}
         </div>
       </section>
     </main>
