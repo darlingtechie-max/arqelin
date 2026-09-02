@@ -1,12 +1,22 @@
 import Link from "next/link";
+import PriorityBadge from "@/components/PriorityBadge";
+import type { Priority } from "@/lib/priority";
 
-const tickets = [
+const tickets: {
+  id: string;
+  subject: string;
+  customer: string;
+  priority: Priority;
+  status: string;
+  statusColor: string;
+  agent: string;
+  activity: string;
+}[] = [
   {
     id: "ARQ-1052",
     subject: "Payment was deducted but order was not confirmed",
     customer: "Sarah Johnson",
-    priority: "High",
-    priorityColor: "#D9534F",
+    priority: "Urgent",
     status: "Open",
     statusColor: "#2F80ED",
     agent: "Unassigned",
@@ -17,7 +27,6 @@ const tickets = [
     subject: "Unable to update account information",
     customer: "Michael Brown",
     priority: "Medium",
-    priorityColor: "#F2994A",
     status: "In Progress",
     statusColor: "#F2994A",
     agent: "Daniel",
@@ -28,7 +37,6 @@ const tickets = [
     subject: "Delivery arrived with a missing item",
     customer: "Ada Okafor",
     priority: "High",
-    priorityColor: "#D9534F",
     status: "Pending",
     statusColor: "#E0A800",
     agent: "Grace",
@@ -39,7 +47,6 @@ const tickets = [
     subject: "Question about subscription renewal",
     customer: "James Wilson",
     priority: "Low",
-    priorityColor: "#27AE60",
     status: "Resolved",
     statusColor: "#27AE60",
     agent: "Daniel",
@@ -167,29 +174,18 @@ export default function TicketsPage() {
 
           <Link
             href="/Tickets/Create"
-              style={{
-                  background: "#F2994A",
-                      color: "#FFFFFF",
-                          textDecoration: "none",
-                              padding: "12px 18px",
-                                  borderRadius: "8px",
-                                      fontWeight: "bold",
-                                          display: "inline-block",
-                                            }}
-                                            >
-                                              + Create Ticket
-                                              </Link>
-          
-              
-              
-              
-              
-              
-              
-          
-          
-            
-          
+            style={{
+              background: "#F2994A",
+              color: "#FFFFFF",
+              textDecoration: "none",
+              padding: "12px 18px",
+              borderRadius: "8px",
+              fontWeight: "bold",
+              display: "inline-block",
+            }}
+          >
+            + Create Ticket
+          </Link>
         </div>
 
         <div style={{ display: "grid", gap: "14px" }}>
@@ -257,9 +253,8 @@ export default function TicketsPage() {
                       minWidth: "140px",
                     }}
                   >
-                    <Badge
-                      label={ticket.priority}
-                      color={ticket.priorityColor}
+                    <PriorityBadge
+                      priority={ticket.priority}
                     />
 
                     <Badge

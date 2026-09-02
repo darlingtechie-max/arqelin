@@ -1,9 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import PrioritySelect from "@/components/PrioritySelect";
+import type { Priority } from "@/lib/priority";
 
 export default function CreateTicketPage() {
   const [created, setCreated] = useState(false);
+  const [priority, setPriority] = useState<Priority | "">("");
 
   return (
     <main
@@ -84,15 +87,22 @@ export default function CreateTicketPage() {
               gap: "16px",
             }}
           >
-            <SelectField
-              label="Priority"
-              options={[
-                "Low",
-                "Medium",
-                "High",
-                "Urgent",
-              ]}
-            />
+            <div>
+                <label style={labelStyle}>Priority</label>
+
+                  <PrioritySelect
+                      value={priority}
+                          onChange={setPriority}
+                            />
+                            </div>
+              
+              
+              
+                
+                
+                
+            
+            
 
             <SelectField
               label="Category"
