@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
 import PriorityBadge from "@/components/PriorityBadge";
 import type { Priority } from "@/lib/priority";
@@ -32,7 +35,7 @@ const caseData: {
   tags: ["delivery", "missing-item", "follow-up"],
 };
 
-const activities = [
+const initialActivities = [
   {
     person: "Ada Okafor",
     text: "My delivery arrived, but one of the items I paid for is missing.",
@@ -80,6 +83,37 @@ function InfoRow({
 }
 
 export default function CaseDetailsPage() {
+  const [activities, setActivities] = useState(initialActivities);
+  const [isAddingUpdate, setIsAddingUpdate] = useState(false);
+  const [newUpdate, setNewUpdate] = useState("");
+
+  function handleSaveUpdate() {
+    const trimmedUpdate = newUpdate.trim();
+
+    if (!trimmedUpdate) {
+      return;
+    }
+
+    const now = new Date();
+
+    const formattedTime = now.toLocaleTimeString([], {
+      hour: "numeric",
+      minute: "2-digit",
+    });
+
+    setActivities([
+      ...activities,
+      {
+        person: "Support Team",
+        text: trimmedUpdate,
+        time: formattedTime,
+      },
+    ]);
+
+    setNewUpdate("");
+    setIsAddingUpdate(false);
+  }
+
   return (
     <main
       style={{
@@ -117,8 +151,8 @@ export default function CaseDetailsPage() {
         <h1>{caseData.subject}</h1>
 
         <p style={{ color: "#5B6472" }}>
-          Structured workspace for investigation, ownership, and
-          customer follow-through.
+          Structured workspace for investigation, ownership, and customer
+          follow-through.
         </p>
       </div>
 
@@ -164,7 +198,7 @@ export default function CaseDetailsPage() {
 
           {activities.map((activity) => (
             <div
-              key={`${activity.person}-${activity.time}`}
+              key={`${activity.person}-${activity.time}-${activity.text}`}
               style={{
                 borderBottom: "1px solid #E4E1D8",
                 padding: "18px 0",
@@ -192,21 +226,105 @@ export default function CaseDetailsPage() {
             </div>
           ))}
 
-          <div style={{ marginTop: "22px" }}>
-            <button
+          {!isAddingUpdate ? (
+            <div style={{ marginTop: "22px" }}>
+              <button
+                onClick={() => setIsAddingUpdate(true)}
+                style={{
+                  background: "#17233D",
+                  color: "#FFFFFF",
+                  border: "none",
+                  padding: "12px 18px",
+                  borderRadius: "8px",
+                  fontWeight: "bold",
+                  cursor: "pointer",
+                }}
+              >
+                Add Update
+              </button>
+            </div>
+          ) : (
+            <div
               style={{
-                background: "#17233D",
-                color: "#FFFFFF",
-                border: "none",
-                padding: "12px 18px",
-                borderRadius: "8px",
-                fontWeight: "bold",
-                cursor: "pointer",
+                marginTop: "22px",
+                padding: "18px",
+                background: "#F7F5F0",
+                borderRadius: "10px",
+                border: "1px solid #E4E1D8",
               }}
             >
-              Add update
-            </button>
-          </div>
+              <label
+                htmlFor="case-update"
+                style={{
+                  display: "block",
+                  fontWeight: "bold",
+                  marginBottom: "10px",
+                }}
+              >
+                Add case update
+              </label>
+
+              <textarea
+                id="case-update"
+                value={newUpdate}
+                onChange={(event) => setNewUpdate(event.target.value)}
+                placeholder="Write an update about this case..."
+                rows={5}
+                style={{
+                  width: "100%",
+                  padding: "12px",
+                  borderRadius: "8px",
+                  border: "1px solid #C9C5BA",
+                  fontFamily: "Arial, sans-serif",
+                  fontSize: "14px",
+                  boxSizing: "border-box",
+                  resize: "vertical",
+                }}
+              />
+
+              <div
+                style={{
+                  display: "flex",
+                  gap: "10px",
+                  marginTop: "12px",
+                  flexWrap: "wrap",
+                }}
+              >
+                <button
+                  onClick={handleSaveUpdate}
+                  style={{
+                    background: "#F2994A",
+                    color: "#FFFFFF",
+                    border: "none",
+                    padding: "10px 16px",
+                    borderRadius: "8px",
+                    fontWeight: "bold",
+                    cursor: "pointer",
+                  }}
+                >
+                  Save Update
+                </button>
+
+                <button
+                  onClick={() => {
+                    setNewUpdate("");
+                    setIsAddingUpdate(false);
+                  }}
+                  style={{
+                    background: "#FFFFFF",
+                    color: "#5B6472",
+                    border: "1px solid #C9C5BA",
+                    padding: "10px 16px",
+                    borderRadius: "8px",
+                    fontWeight: "bold",
+                    cursor: "pointer",
+                  }}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          )}
         </section>
 
         <aside
@@ -227,15 +345,10 @@ export default function CaseDetailsPage() {
             <h2 style={{ marginTop: 0 }}>Case details</h2>
 
             <InfoRow label="Customer" value={caseData.customer} />
-
             <InfoRow label="Email" value={caseData.email} />
-
             <InfoRow label="Category" value={caseData.category} />
-
             <InfoRow label="Owner" value={caseData.owner} />
-
             <InfoRow label="Team" value={caseData.team} />
-
             <InfoRow label="Follow-up" value={caseData.followUp} />
           </section>
 
@@ -322,8 +435,8 @@ export default function CaseDetailsPage() {
                 marginBottom: 0,
               }}
             >
-              When a commitment is made to the customer, Arqelin will
-              track the owner, deadline, and follow-through status here.
+              When a commitment is made to the customer, Arqelin will track
+              the owner, deadline, and follow-through status here.
             </p>
           </section>
 

@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
 import PriorityBadge from "@/components/PriorityBadge";
 import type { Priority } from "@/lib/priority";
@@ -13,24 +16,22 @@ const ticket: {
   category: string;
   agent: string;
   team: string;
-  linkedCase: string;
   tags: string[];
 } = {
   id: "ARQ-1043",
   subject: "Delivery arrived with a missing item",
   customer: "Ada Okafor",
   email: "ada@example.com",
-  priority: "Urgent",
-  status: "Open",
-  statusColor: "#2F80ED",
+  priority: "High",
+  status: "Pending",
+  statusColor: "#E0A800",
   category: "Delivery",
-  agent: "Unassigned",
+  agent: "Grace",
   team: "Customer Support",
-  linkedCase: "ARQ-C2042",
-  tags: ["delivery", "missing-item", "urgent"],
+  tags: ["delivery", "missing-item"],
 };
 
-const activities = [
+const initialActivities = [
   {
     person: "Ada Okafor",
     text: "My delivery arrived, but one of the items I paid for is missing.",
@@ -38,7 +39,7 @@ const activities = [
   },
   {
     person: "Support Team",
-    text: "We've received your request and are checking the delivery record.",
+    text: "We've received your request and are checking the delivery details.",
     time: "10:24 AM",
   },
 ];
@@ -73,6 +74,37 @@ function InfoRow({
 }
 
 export default function TicketDetailsPage() {
+  const [activities, setActivities] = useState(initialActivities);
+  const [isAddingReply, setIsAddingReply] = useState(false);
+  const [newReply, setNewReply] = useState("");
+
+  function handleSendReply() {
+    const trimmedReply = newReply.trim();
+
+    if (!trimmedReply) {
+      return;
+    }
+
+    const now = new Date();
+
+    const formattedTime = now.toLocaleTimeString([], {
+      hour: "numeric",
+      minute: "2-digit",
+    });
+
+    setActivities([
+      ...activities,
+      {
+        person: "Support Team",
+        text: trimmedReply,
+        time: formattedTime,
+      },
+    ]);
+
+    setNewReply("");
+    setIsAddingReply(false);
+  }
+
   return (
     <main
       style={{
@@ -156,7 +188,7 @@ export default function TicketDetailsPage() {
 
           {activities.map((activity) => (
             <div
-              key={`${activity.person}-${activity.time}`}
+              key={`${activity.person}-${activity.time}-${activity.text}`}
               style={{
                 borderBottom: "1px solid #E4E1D8",
                 padding: "18px 0",
@@ -184,21 +216,105 @@ export default function TicketDetailsPage() {
             </div>
           ))}
 
-          <div style={{ marginTop: "22px" }}>
-            <button
+          {!isAddingReply ? (
+            <div style={{ marginTop: "22px" }}>
+              <button
+                onClick={() => setIsAddingReply(true)}
+                style={{
+                  background: "#17233D",
+                  color: "#FFFFFF",
+                  border: "none",
+                  padding: "12px 18px",
+                  borderRadius: "8px",
+                  fontWeight: "bold",
+                  cursor: "pointer",
+                }}
+              >
+                Add Reply
+              </button>
+            </div>
+          ) : (
+            <div
               style={{
-                background: "#17233D",
-                color: "#FFFFFF",
-                border: "none",
-                padding: "12px 18px",
-                borderRadius: "8px",
-                fontWeight: "bold",
-                cursor: "pointer",
+                marginTop: "22px",
+                padding: "18px",
+                background: "#F7F5F0",
+                borderRadius: "10px",
+                border: "1px solid #E4E1D8",
               }}
             >
-              Add reply
-            </button>
-          </div>
+              <label
+                htmlFor="ticket-reply"
+                style={{
+                  display: "block",
+                  fontWeight: "bold",
+                  marginBottom: "10px",
+                }}
+              >
+                Write a reply
+              </label>
+
+              <textarea
+                id="ticket-reply"
+                value={newReply}
+                onChange={(event) => setNewReply(event.target.value)}
+                placeholder="Write your reply to the customer..."
+                rows={5}
+                style={{
+                  width: "100%",
+                  padding: "12px",
+                  borderRadius: "8px",
+                  border: "1px solid #C9C5BA",
+                  fontFamily: "Arial, sans-serif",
+                  fontSize: "14px",
+                  boxSizing: "border-box",
+                  resize: "vertical",
+                }}
+              />
+
+              <div
+                style={{
+                  display: "flex",
+                  gap: "10px",
+                  marginTop: "12px",
+                  flexWrap: "wrap",
+                }}
+              >
+                <button
+                  onClick={handleSendReply}
+                  style={{
+                    background: "#F2994A",
+                    color: "#FFFFFF",
+                    border: "none",
+                    padding: "10px 16px",
+                    borderRadius: "8px",
+                    fontWeight: "bold",
+                    cursor: "pointer",
+                  }}
+                >
+                  Send Reply
+                </button>
+
+                <button
+                  onClick={() => {
+                    setNewReply("");
+                    setIsAddingReply(false);
+                  }}
+                  style={{
+                    background: "#FFFFFF",
+                    color: "#5B6472",
+                    border: "1px solid #C9C5BA",
+                    padding: "10px 16px",
+                    borderRadius: "8px",
+                    fontWeight: "bold",
+                    cursor: "pointer",
+                  }}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          )}
         </section>
 
         <aside
@@ -240,24 +356,20 @@ export default function TicketDetailsPage() {
                 marginTop: 0,
               }}
             >
-              LINKED CASE
+              ✦ ARQELIN AI
             </p>
 
-            <p style={{ color: "#5B6472" }}>
-              This ticket requires structured follow-through and has been
-              converted into a Case.
-            </p>
+            <strong>Investigation check</strong>
 
-            <Link
-              href="/Cases/ARQ-C2042"
+            <p
               style={{
-                color: "#2F80ED",
-                fontWeight: "bold",
-                textDecoration: "none",
+                color: "#5B6472",
+                marginBottom: 0,
               }}
             >
-              View Case {ticket.linkedCase} →
-            </Link>
+              This ticket may require follow-through if resolving the missing
+              item requires coordination beyond a simple customer response.
+            </p>
           </section>
 
           <section
