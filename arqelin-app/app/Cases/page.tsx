@@ -1,3 +1,4 @@
+import Link from "next/link";
 import PriorityBadge from "@/components/PriorityBadge";
 import type { Priority } from "@/lib/priority";
 
@@ -177,19 +178,20 @@ export default function CasesPage() {
             </p>
           </div>
 
-          <button
+          <Link
+            href="/Cases/Create"
             style={{
               background: "#F2994A",
               color: "#FFFFFF",
-              border: "none",
+              textDecoration: "none",
               padding: "12px 18px",
               borderRadius: "8px",
               fontWeight: "bold",
-              cursor: "pointer",
+              display: "inline-block",
             }}
           >
             + Create Case
-          </button>
+          </Link>
         </div>
 
         <div style={{ display: "grid", gap: "14px" }}>
@@ -242,9 +244,7 @@ export default function CasesPage() {
                     minWidth: "150px",
                   }}
                 >
-                  <PriorityBadge
-                    priority={caseItem.priority}
-                  />
+                  <PriorityBadge priority={caseItem.priority} />
 
                   <StatusBadge
                     label={caseItem.status}
